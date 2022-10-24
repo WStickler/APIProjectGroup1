@@ -7,10 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIProjectGroup1.Models;
 using APIProjectGroup1.Services;
-<<<<<<< HEAD
-=======
 using APIProjectGroup1.Models.DTOs;
->>>>>>> ameer
 
 namespace APIProjectGroup1.Controllers
 {
@@ -25,19 +22,18 @@ namespace APIProjectGroup1.Controllers
             _service = service;
         }
 
-       
-        [HttpGet("CustomersWithMostorders")]
-        public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
+        // GET: api/Customers
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
-            var customers = await _service.GetCustomersWithMostOrders(n);
-            return customers.Select(x => Utils.CustomerToDTO(x)).ToList();
+            return await _service.GetCustomersAsync();
         }
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(string id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _service.GetCustomerByIdAsync(id);
 
             if (customer == null)
             {
@@ -47,10 +43,9 @@ namespace APIProjectGroup1.Controllers
             return customer;
         }
 
-        // PUT: api/Customers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(string id, Customer customer)
+        // GET: api/Customers/Search?searchterm=Karl (Searches if "Karl" is in customerId, contactName.
+        [HttpGet("Search")]
+        public async Task<List<Customer>> GetCustomerBySearch(string searchTerm = "")
         {
             var customerList = await _service.GetCustomerBySearchTerm(searchTerm);
 
@@ -67,14 +62,14 @@ namespace APIProjectGroup1.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            _context.Customers.Add(customer);
+            _service.CreateCustomerAsync(customer);
             try
             {
-                await _context.SaveChangesAsync();
+                await _service.SaveCustomerChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (CustomerExists(customer.CustomerId))
+                if (_service.CustomerExists(customer.CustomerId))
                 {
                     return Conflict();
                 }
@@ -96,17 +91,14 @@ namespace APIProjectGroup1.Controllers
             {
                 return NotFound();
             }
-
-            await _service.RemoveCustomerAsync(customer);
-
             return NoContent();
         }
 
-        private bool CustomerExists(string id)
+        [HttpGet("CustomersWithMostorders")]
+        public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
         {
-            return _context.Customers.Any(e => e.CustomerId == id);
+            var customers = await _service.GetCustomersWithMostOrders(n);
+            return customers.Select(x => Utils.CustomerToDTO(x)).ToList();
         }
-=======
->>>>>>> ameer
     }
-}
+    }
