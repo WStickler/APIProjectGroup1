@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using APIProjectGroup1.Controllers;
 
 namespace Tests
 {
@@ -16,6 +17,9 @@ namespace Tests
     {
         private CustomersController _controller;
 
+<<<<<<< HEAD
+       
+=======
         [Category("Controller Constructor")]
         [Category("Happy Path")]
         [Test]
@@ -56,5 +60,6 @@ namespace Tests
 
             Assert.That(result.Value, Is.TypeOf<Customer>());
         }
+>>>>>>> dev
     }
 }
