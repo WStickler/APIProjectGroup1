@@ -79,8 +79,8 @@ namespace APIProjectGroup1.Controllers
                 }
             }
 
-        //    return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
-        //}
+            return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
+        }
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
