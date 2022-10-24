@@ -19,7 +19,8 @@ namespace APIProjectGroup1.Services
     
         public async Task CreateCustomerAsync(Customer c)
         {
-            throw new NotImplementedException();
+            _context.Customers.Add(c);
+            await _context.SaveChangesAsync();
         }
 
         public async Task<List<Customer>> GetCustomersAsync()

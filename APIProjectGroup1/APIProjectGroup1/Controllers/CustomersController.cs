@@ -99,7 +99,7 @@ namespace APIProjectGroup1.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            _service.CreateCustomerAsync(customer);
+            await _service.CreateCustomerAsync(customer);
             try
             {
                 await _service.SaveCustomerChangesAsync();
