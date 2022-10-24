@@ -53,6 +53,8 @@ namespace APIProjectGroup1.Services
                 .Select(x=>x).ToListAsync();
         }
 
+
+
         public async Task RemoveCustomerAsync(Customer c)
         {
             _context.Customers.Remove(c);

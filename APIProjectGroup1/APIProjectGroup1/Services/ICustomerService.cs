@@ -1,4 +1,5 @@
 ﻿using APIProjectGroup1.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace APIProjectGroup1.Services
 {
@@ -13,5 +14,6 @@ namespace APIProjectGroup1.Services
         Task RemoveCustomerAsync(Customer c);
 
         bool CustomerExists(string id);
+        Task<ActionResult<IEnumerable<Customer>>> GetCustomersAsync();
     }
 }

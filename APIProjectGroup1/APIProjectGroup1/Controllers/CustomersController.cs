@@ -91,12 +91,13 @@ namespace APIProjectGroup1.Controllers
             {
                 return NotFound();
             }
-
-            [HttpGet("CustomersWithMostorders")]
-            public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
-            {
-                var customers = await _service.GetCustomersWithMostOrders(n);
-                return customers.Select(x => Utils.CustomerToDTO(x)).ToList();
-            }
+            return NoContent()
         }
-}
+
+        [HttpGet("CustomersWithMostorders")]
+        public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
+        {
+            var customers = await _service.GetCustomersWithMostOrders(n);
+            return customers.Select(x => Utils.CustomerToDTO(x)).ToList();
+        }
+    }
