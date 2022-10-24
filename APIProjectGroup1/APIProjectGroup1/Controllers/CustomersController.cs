@@ -23,12 +23,21 @@ namespace APIProjectGroup1.Controllers
         }
 
        
-        [HttpGet("CustomersWithMostorders")]
-        public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
+        [HttpGet]
+        public List<CustomerDTO> GetCustomers()
         {
-            var customers = await _service.GetCustomersWithMostOrders(n);
-            return customers.Select(x => Utils.CustomerToDTO(x)).ToList();
+            var customers = _service.GetCustomers().Result
+                .Select(x=>Utils.CustomerToDTO(x)).ToList();
+            return customers;
         }
 
+        [HttpGet("MostOrders")]
+        public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
+        {
+            var l = await _service.GetCustomersWithOrders();
+            return l.OrderByDescending(x=>x.Orders.Count)
+                .Take(n).Select(x=>Utils.CustomerToDTO(x)).ToList();
+
+        }
     }
 }
