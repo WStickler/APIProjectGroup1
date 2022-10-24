@@ -128,8 +128,11 @@ namespace APIProjectGroup1.Controllers
             {
                 var nomalisedSearchTerm = searchTerm.ToLower().Trim();
 
-                if (customer.CustomerId.ToLower().Contains(nomalisedSearchTerm) ||
-                    customer.ContactName.ToLower().Contains(nomalisedSearchTerm))
+                if (customer.CustomerId != null && customer.CustomerId.ToLower().Contains(nomalisedSearchTerm))
+                {
+                    outputList.Add(customer);
+                }
+                else if (customer.ContactName != null && customer.ContactName.ToLower().Contains(nomalisedSearchTerm))
                 {
                     outputList.Add(customer);
                 }
