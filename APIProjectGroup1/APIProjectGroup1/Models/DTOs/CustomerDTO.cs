@@ -7,10 +7,10 @@
             Orders = new List<OrderDTO>();
         }
         public string Id { get; set;} 
-        public string? ContactTitle { get; set;}
+        public string ContactTitle { get; set;}
         public string? Country { get; set;}
         public string? CompanyName { get; set;}
-        public string? Name { get; set;}
+        public string Name { get; set;}
         public int TotalOrder { get; init;}
 
         public virtual ICollection<OrderDTO> Orders { get; set;}    

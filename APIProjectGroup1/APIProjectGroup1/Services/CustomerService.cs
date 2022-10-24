@@ -40,7 +40,7 @@ namespace APIProjectGroup1.Services
         {
            return await _context.Customers
                 .Include(x=> x.Orders)
-                .Take(n).OrderByDescending(x=>x.Orders)
+                .OrderByDescending(x=>x.Orders.Count).Take(n)
                 .Select(x=>x).ToListAsync();
         }
 

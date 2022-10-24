@@ -23,7 +23,7 @@ namespace APIProjectGroup1.Controllers
         }
 
        
-        [HttpGet("{Customers}/orders")]
+        [HttpGet("CustomersWithMostorders")]
         public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
         {
             var customers = await _service.GetCustomersWithMostOrders(n);
