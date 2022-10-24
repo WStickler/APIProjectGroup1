@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using APIProjectGroup1.Models;
 using APIProjectGroup1.Services;
 using APIProjectGroup1.Models.DTOs;
+using System.Runtime.InteropServices;
 
 namespace APIProjectGroup1.Controllers
 {
@@ -22,12 +23,80 @@ namespace APIProjectGroup1.Controllers
             _service = service;
         }
 
-        // GET: api/Customers
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        #region api/Customers
+        public class GetCustomersParams
         {
-            return await _service.GetCustomersAsync();
+            public string? ContactTitle { get; set; }
+            public string? Address { get; set; }
+            public string? City { get; set; }
+            public string? Region { get; set; }
+            public string? PostalCode { get; set; }
+            public string? Country { get; set; }
+
+            public bool AreAllFieldsNull()
+            {
+                if (ContactTitle == null &&
+                    Address == null &&
+                    City == null &&
+                    Region == null &&
+                    PostalCode == null &&
+                    Country == null)
+                {
+                    return true;
+                }
+                return false;
+            }
         }
+
+        // GET: api/Customers allows for filtering by using query params i.e. api/Customer?City=London&Country=UK
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers([FromQuery] GetCustomersParams customerParams)
+        {
+            var customerList = await _service.GetCustomersAsync();
+            if (customerParams.AreAllFieldsNull())
+            {
+                return customerList;
+            }
+
+            List<Customer> outputList = new List<Customer>();
+            foreach (var customer in customerList) // Checks that all non-null params are true. if so adds to outputList.
+            {
+                bool addToOutput = true;
+
+                if (customerParams.ContactTitle != null && !IsParamInString(customerParams.ContactTitle, customer.ContactTitle))
+                    addToOutput = false;
+
+                if (customerParams.Address != null && !IsParamInString(customerParams.Address, customer.Address))
+                    addToOutput = false;
+
+                if (customerParams.City != null && !IsParamInString(customerParams.City, customer.City))
+                    addToOutput = false;
+
+                if (customerParams.Region != null && !IsParamInString(customerParams.Region, customer.Region))
+                    addToOutput = false;
+
+                if (customerParams.PostalCode != null && !IsParamInString(customerParams.PostalCode, customer.PostalCode))
+                    addToOutput = false;
+
+                if (customerParams.Country != null && !IsParamInString(customerParams.Country, customer.Country))
+                    addToOutput = false;
+                
+
+                if (addToOutput)
+                    outputList.Add(customer);
+            }
+
+            return outputList;
+        }
+
+        private bool IsParamInString(string param, string? customerPropString)
+        {
+            if (customerPropString != null && customerPropString == param)
+                return true;
+            else
+                return false;
+        }
+        #endregion
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
@@ -43,18 +112,30 @@ namespace APIProjectGroup1.Controllers
             return customer;
         }
 
-        // GET: api/Customers/Search?searchterm=Karl (Searches if "Karl" is in customerId, contactName.
+        // GET: api/Customers/Search?searchterm=Karl (Searches if "Karl" is in customerId, contactName. Case-Insensitive
         [HttpGet("Search")]
         public async Task<List<Customer>> GetCustomerBySearch(string searchTerm = "")
         {
-            var customerList = await _service.GetCustomerBySearchTerm(searchTerm);
+            List<Customer> outputList = new List<Customer>();
+            var customerList = await _service.GetCustomersAsync();
 
             if (customerList == null)
             {
                 return new List<Customer>();
             }
 
-            return customerList;
+            foreach (var customer in customerList)
+            {
+                var nomalisedSearchTerm = searchTerm.ToLower().Trim();
+
+                if (customer.CustomerId.ToLower().Contains(nomalisedSearchTerm) ||
+                    customer.ContactName.ToLower().Contains(nomalisedSearchTerm))
+                {
+                    outputList.Add(customer);
+                }
+            }
+
+            return outputList;
         }
 
         [HttpPut("{id}")]
@@ -138,7 +219,7 @@ namespace APIProjectGroup1.Controllers
         public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
         {
             var customers = _service.GetCustomersAsync().Result
-                .Select(x=>Utils.CustomerToDTO(x)).ToList();
+                .Select(x => Utils.CustomerToDTO(x)).ToList();
             return customers;
         }
         private bool CustomerExists(string id)
@@ -146,4 +227,4 @@ namespace APIProjectGroup1.Controllers
             return _service.CustomerExists(id);
         }
     }
-    }
+}
