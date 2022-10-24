@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIProjectGroup1.Models;
 using APIProjectGroup1.Services;
+<<<<<<< HEAD
+=======
+using APIProjectGroup1.Models.DTOs;
+>>>>>>> ameer
 
 namespace APIProjectGroup1.Controllers
 {
@@ -14,21 +18,29 @@ namespace APIProjectGroup1.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
+<<<<<<< HEAD
         private readonly NorthwindContext _context;
         private readonly ICustomerService _service;
 
         public CustomersController(NorthwindContext context)
+=======
+        private readonly ICustomerService _service;
+        
+        public CustomersController(ICustomerService service)
+>>>>>>> ameer
         {
-            _context = context;
+            _service = service;
         }
 
-        // GET: api/Customers
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+       
+        [HttpGet("CustomersWithMostorders")]
+        public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
         {
-            return await _context.Customers.ToListAsync();
+            var customers = await _service.GetCustomersWithMostOrders(n);
+            return customers.Select(x => Utils.CustomerToDTO(x)).ToList();
         }
 
+<<<<<<< HEAD
         // GET: api/Customers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(string id)
@@ -118,5 +130,7 @@ namespace APIProjectGroup1.Controllers
         {
             return _context.Customers.Any(e => e.CustomerId == id);
         }
+=======
+>>>>>>> ameer
     }
 }

@@ -6,11 +6,9 @@ namespace APIProjectGroup1.Services
     {
         List<Customer> GetCustomers();
         Task<Customer> GetCustomerByIdAsync(string CustomerId);
-
         Task CreateCustomerAsync(Customer c);
-
+        Task<List<Customer>> GetCustomersWithMostOrders(int n);
         Task SaveCustomerChangesAsync();
-
         Task RemoveCustomerAsync(Customer c);
 
         bool CustomerExists(string id);
