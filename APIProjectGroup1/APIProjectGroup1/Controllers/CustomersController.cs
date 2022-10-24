@@ -101,3 +101,4 @@ namespace APIProjectGroup1.Controllers
             return customers.Select(x => Utils.CustomerToDTO(x)).ToList();
         }
     }
+    }
