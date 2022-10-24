@@ -5,11 +5,8 @@ namespace APIProjectGroup1.Services
 {
     public interface ICustomerService
     {
-<<<<<<< HEAD
         Task<List<Customer>> GetCustomers();
-=======
         Task<List<Customer>> GetCustomersAsync();
->>>>>>> dev
         Task<Customer> GetCustomerByIdAsync(string CustomerId);
         Task<List<Customer>> GetCustomerBySearchTerm(string SearchTerm);
         Task CreateCustomerAsync(Customer c);

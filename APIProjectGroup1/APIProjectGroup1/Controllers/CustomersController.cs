@@ -21,12 +21,7 @@ namespace APIProjectGroup1.Controllers
         {
             _service = service;
         }
-
-<<<<<<< HEAD
        
-        [HttpGet]
-        public List<CustomerDTO> GetCustomers()
-=======
         // GET: api/Customers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
@@ -139,16 +134,6 @@ namespace APIProjectGroup1.Controllers
             return NoContent();
         }
 
-        [HttpGet("CustomersWithMostorders")]
-        public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
->>>>>>> dev
-        {
-            var customers = _service.GetCustomers().Result
-                .Select(x=>Utils.CustomerToDTO(x)).ToList();
-            return customers;
-        }
-<<<<<<< HEAD
-
         [HttpGet("MostOrders")]
         public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
         {
@@ -157,11 +142,10 @@ namespace APIProjectGroup1.Controllers
                 .Take(n).Select(x=>Utils.CustomerToDTO(x)).ToList();
 
         }
-=======
+
         private bool CustomerExists(string id)
         {
             return _service.CustomerExists(id);
         }
     }
->>>>>>> dev
-    }
+}
