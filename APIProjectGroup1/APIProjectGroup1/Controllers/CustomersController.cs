@@ -56,30 +56,30 @@ namespace APIProjectGroup1.Controllers
             return customerList;
         }
 
-        // POST: api/Customers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
-        {
-            _context.Customers.Add(customer);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (CustomerExists(customer.CustomerId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //// POST: api/Customers
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        //{
+        //    _context.Customers.Add(customer);
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateException)
+        //    {
+        //        if (CustomerExists(customer.CustomerId))
+        //        {
+        //            return Conflict();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
-        }
+        //    return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
+        //}
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
@@ -96,9 +96,9 @@ namespace APIProjectGroup1.Controllers
             return NoContent();
         }
 
-        private bool CustomerExists(string id)
-        {
-            return _context.Customers.Any(e => e.CustomerId == id);
-        }
+        //private bool CustomerExists(string id)
+        //{
+        //    return _context.Customers.Any(e => e.CustomerId == id);
+        //}
     }
 }
