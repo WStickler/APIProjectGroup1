@@ -5,7 +5,8 @@ namespace APIProjectGroup1.Services
 {
     public class CustomerService : ICustomerService
     {
-        private readonly NorthwindContext _context;
+        private readonly NorthwindContext _context
+            ;
         public CustomerService()
         {
             _context = new NorthwindContext();
@@ -42,6 +43,14 @@ namespace APIProjectGroup1.Services
                         c.CustomerId.Contains(SearchTerm) ||
                         c.ContactName.Contains(SearchTerm))
                     .ToListAsync();
+        }
+
+        public async Task<List<Customer>> GetCustomersWithMostOrders(int n)
+        {
+           return await _context.Customers
+                .Include(x=> x.Orders)
+                .OrderByDescending(x=>x.Orders.Count).Take(n)
+                .Select(x=>x).ToListAsync();
         }
 
         public async Task RemoveCustomerAsync(Customer c)

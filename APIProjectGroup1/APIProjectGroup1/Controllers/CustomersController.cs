@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIProjectGroup1.Models;
 using APIProjectGroup1.Services;
+<<<<<<< HEAD
+=======
+using APIProjectGroup1.Models.DTOs;
+>>>>>>> ameer
 
 namespace APIProjectGroup1.Controllers
 {
@@ -21,18 +25,19 @@ namespace APIProjectGroup1.Controllers
             _service = service;
         }
 
-        // GET: api/Customers
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+       
+        [HttpGet("CustomersWithMostorders")]
+        public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
         {
-            return await _service.GetCustomersAsync();
+            var customers = await _service.GetCustomersWithMostOrders(n);
+            return customers.Select(x => Utils.CustomerToDTO(x)).ToList();
         }
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(string id)
         {
-            var customer = await _service.GetCustomerByIdAsync(id);
+            var customer = await _context.Customers.FindAsync(id);
 
             if (customer == null)
             {
@@ -42,9 +47,10 @@ namespace APIProjectGroup1.Controllers
             return customer;
         }
 
-        // GET: api/Customers/Search?searchterm=Karl (Searches if "Karl" is in customerId, contactName.
-        [HttpGet("Search")]
-        public async Task<List<Customer>> GetCustomerBySearch(string searchTerm = "")
+        // PUT: api/Customers/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCustomer(string id, Customer customer)
         {
             var customerList = await _service.GetCustomerBySearchTerm(searchTerm);
 
@@ -100,5 +106,7 @@ namespace APIProjectGroup1.Controllers
         {
             return _context.Customers.Any(e => e.CustomerId == id);
         }
+=======
+>>>>>>> ameer
     }
 }
