@@ -1,6 +1,8 @@
 using APIProjectGroup1.Models;
 using APIProjectGroup1.Services;
 using Microsoft.EntityFrameworkCore;
+using Moq;
+using APIProjectGroup1.Controllers;
 
 namespace Tests
 {
@@ -124,7 +126,7 @@ namespace Tests
         [Test]
         public async Task GetIncorrectCustomerById_ReturnsNull ()
         {
-            var customerService = _service.GetCustomerByIdAsync("SERG");
+            var customerService = await _service.GetCustomerByIdAsync("NULL");
 
             Assert.That(customerService, Is.Null);
         }
