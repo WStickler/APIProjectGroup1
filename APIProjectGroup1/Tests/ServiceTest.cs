@@ -126,7 +126,7 @@ namespace Tests
         [Test]
         public async Task GetIncorrectCustomerById_ReturnsNull ()
         {
-            var customerService = _service.GetCustomerByIdAsync("SERG");
+            var customerService = await _service.GetCustomerByIdAsync("NULL");
 
             Assert.That(customerService, Is.Null);
         }

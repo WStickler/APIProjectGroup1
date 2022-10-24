@@ -1,4 +1,5 @@
 ﻿using APIProjectGroup1.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace APIProjectGroup1.Services
@@ -53,8 +54,6 @@ namespace APIProjectGroup1.Services
                 .Select(x=>x).ToListAsync();
         }
 
-
-
         public async Task RemoveCustomerAsync(Customer c)
         {
             _context.Customers.Remove(c);
@@ -65,5 +64,12 @@ namespace APIProjectGroup1.Services
         {
             await _context.SaveChangesAsync();
         }
+
+        public List<Customer> GetCustomers()
+        {
+            throw new NotImplementedException();
+        }
+
+        
     }
 }
