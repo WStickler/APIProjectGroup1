@@ -17,11 +17,6 @@ namespace APIProjectGroup1.Controllers
         private readonly NorthwindContext _context;
         private readonly ICustomerService _service;
 
-        public CustomersController(ICustomerService service)
-        {
-            _service = service;
-        }
-
         public CustomersController(NorthwindContext context)
         {
             _context = context;
