@@ -10,5 +10,7 @@ namespace APIProjectGroup1.Services
         Task<List<Customer>> GetCustomersWithMostOrders(int n);
         Task SaveCustomerChangesAsync();
         Task RemoveCustomerAsync(Customer c);
+
+        bool CustomerExists(string id);
     }
 }

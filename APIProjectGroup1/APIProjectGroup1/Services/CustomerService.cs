@@ -21,6 +21,11 @@ namespace APIProjectGroup1.Services
             throw new NotImplementedException();
         }
 
+        public bool CustomerExists(string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Customer> GetCustomerByIdAsync(string CustomerId)
         {
             throw new NotImplementedException();
