@@ -1,3 +1,7 @@
+using APIProjectGroup1.Models;
+using APIProjectGroup1.Services;
+using Microsoft.EntityFrameworkCore;
+
 namespace APIProjectGroup1
 {
     public class Program
@@ -12,6 +16,9 @@ namespace APIProjectGroup1
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<NorthwindContext>(opt => opt.UseSqlServer(builder.Configuration["default"]));
+            builder.Services.AddDbContext<NorthwindContext>(opt => opt.UseInMemoryDatabase("Northwind"));
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
 
             var app = builder.Build();
 
