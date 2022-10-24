@@ -28,6 +28,9 @@ namespace Tests
                 ContactTitle = "Mr",
                 City = "Aberystwyth",
                 Country = "UK",
+                Orders = new List<Order>() {
+                    new Order() { CustomerId = "SERG", EmployeeId = 1, OrderId = 1 }
+                }
             };
 
             Customer customer2 = new Customer()
@@ -143,6 +146,26 @@ namespace Tests
         public void CustomerExists_ReturnsFalseIfCustomerDoesntExist()
         {
             Assert.That(!_service.CustomerExists("NOPE"));
+        }
+        [Category("GetCustomerAsync")]
+        [Category("Happy Path")]
+        [Test]
+        public async Task GetCustomerAsync_ReturnsCorrectListAsync()
+        {
+            var result = await _service.GetCustomersAsync();
+            var expected = _context.Customers.ToList();
+
+            Assert.That(result, Is.EqualTo(expected));
+        }
+        [Category("GetCustomerWithMostOrders")]
+        [Category("Happy Path")]
+        [Test]
+        public async Task GetCustomerWithMostOrdersReturnsCorrectCustomerAsync()
+        {
+            var result = await _service.GetCustomersWithMostOrders(1);
+
+            Assert.That(result.Count(), Is.EqualTo(1));
+
         }
     }
 }

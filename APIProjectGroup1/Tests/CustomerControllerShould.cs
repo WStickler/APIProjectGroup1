@@ -88,7 +88,7 @@ namespace Tests
 
             var result = await _controller.GetCustomerBySearch(It.IsAny<string>());
 
-            Assert.That(result, Is.Null);
+            Assert.That(result, Is.EqualTo(new List<Customer>()));
         }
         [Ignore("Not implemented")]
         [Category("Post Customer")]
