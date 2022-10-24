@@ -13,5 +13,30 @@ namespace APIProjectGroup1.Services
         {
             _context = context;
         }
+    
+        public async Task CreateCustomerAsync(Customer c)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Customer> GetCustomerByIdAsync(string CustomerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public  List<Customer> GetCustomers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task RemoveCustomerAsync(Customer c)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task SaveCustomerChangesAsync()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
