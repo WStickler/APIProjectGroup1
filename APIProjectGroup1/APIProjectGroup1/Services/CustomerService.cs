@@ -1,4 +1,5 @@
 ﻿using APIProjectGroup1.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace APIProjectGroup1.Services
 {
@@ -21,7 +22,7 @@ namespace APIProjectGroup1.Services
 
         public async Task<Customer> GetCustomerByIdAsync(string CustomerId)
         {
-            throw new NotImplementedException();
+            return await _context.Customers.FindAsync(CustomerId);
         }
 
         public  List<Customer> GetCustomers()

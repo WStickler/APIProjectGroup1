@@ -103,7 +103,7 @@ namespace APIProjectGroup1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(string id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _service.GetCustomerByIdAsync(id);
             if (customer == null)
             {
                 return NotFound();
