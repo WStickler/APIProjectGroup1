@@ -18,16 +18,9 @@ namespace APIProjectGroup1.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-<<<<<<< HEAD
-        private readonly NorthwindContext _context;
-        private readonly ICustomerService _service;
+        private ICustomerService _service;
 
-        public CustomersController(NorthwindContext context)
-=======
-        private readonly ICustomerService _service;
-        
         public CustomersController(ICustomerService service)
->>>>>>> ameer
         {
             _service = service;
         }
@@ -40,7 +33,6 @@ namespace APIProjectGroup1.Controllers
             return customers.Select(x => Utils.CustomerToDTO(x)).ToList();
         }
 
-<<<<<<< HEAD
         // GET: api/Customers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(string id)
@@ -60,30 +52,14 @@ namespace APIProjectGroup1.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(string id, Customer customer)
         {
-            if (id != customer.CustomerId)
+            var customerList = await _service.GetCustomerBySearchTerm(searchTerm);
+
+            if (customerList == null)
             {
-                return BadRequest();
+                return new List<Customer>();
             }
 
-            _context.Entry(customer).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return customerList;
         }
 
         // POST: api/Customers

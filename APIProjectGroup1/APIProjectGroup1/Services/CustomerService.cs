@@ -21,6 +21,11 @@ namespace APIProjectGroup1.Services
             throw new NotImplementedException();
         }
 
+        public async Task<List<Customer>> GetCustomersAsync()
+        {
+            return await _context.Customers.ToListAsync();
+        }
+
         public bool CustomerExists(string id)
         {
             throw new NotImplementedException();
@@ -31,9 +36,13 @@ namespace APIProjectGroup1.Services
             return await _context.Customers.FindAsync(CustomerId);
         }
 
-        public  List<Customer> GetCustomers()
+        public async Task<List<Customer>> GetCustomerBySearchTerm(string SearchTerm)
         {
-            throw new NotImplementedException();
+            return await _context.Customers
+                    .Where(c => 
+                        c.CustomerId.Contains(SearchTerm) ||
+                        c.ContactName.Contains(SearchTerm))
+                    .ToListAsync();
         }
 
         public async Task<List<Customer>> GetCustomersWithMostOrders(int n)
