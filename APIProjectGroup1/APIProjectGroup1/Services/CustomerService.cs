@@ -28,7 +28,7 @@ namespace APIProjectGroup1.Services
 
         public bool CustomerExists(string id)
         {
-            throw new NotImplementedException();
+            return (bool)(_context.Customers?.Any(c => c.CustomerId == id));
         }
 
         public async Task<Customer> GetCustomerByIdAsync(string CustomerId)

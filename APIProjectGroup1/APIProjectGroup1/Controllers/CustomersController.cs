@@ -57,6 +57,43 @@ namespace APIProjectGroup1.Controllers
             return customerList;
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutSupplier(string id, CustomerDTO customerDto)
+        {
+            //The id in the URI has to match the URI in the JSON request body we send
+
+            if (id != customerDto.Id)
+            {
+                return BadRequest();
+            }
+
+            Customer customer = await _service.GetCustomerByIdAsync(id);
+
+            customer.CompanyName = customerDto.CompanyName ?? customer.CompanyName;
+            customer.ContactName = customerDto.Name ?? customer.ContactName;
+            customer.ContactTitle = customerDto.ContactTitle ?? customer.ContactTitle;
+            customer.Country = customerDto.Country ?? customer.Country;
+
+
+            try
+            {
+                await _service.SaveCustomerChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CustomerExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Customers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -99,6 +136,10 @@ namespace APIProjectGroup1.Controllers
         {
             var customers = await _service.GetCustomersWithMostOrders(n);
             return customers.Select(x => Utils.CustomerToDTO(x)).ToList();
+        }
+        private bool CustomerExists(string id)
+        {
+            return _service.CustomerExists(id);
         }
     }
     }
