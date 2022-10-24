@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIProjectGroup1.Models;
 using APIProjectGroup1.Services;
+using APIProjectGroup1.Models.DTOs;
 
 namespace APIProjectGroup1.Controllers
 {
@@ -56,27 +57,27 @@ namespace APIProjectGroup1.Controllers
             return customerList;
         }
 
-        //// POST: api/Customers
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
-        //{
-        //    _context.Customers.Add(customer);
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateException)
-        //    {
-        //        if (CustomerExists(customer.CustomerId))
-        //        {
-        //            return Conflict();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+        // POST: api/Customers
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        {
+            _service.CreateCustomerAsync(customer);
+            try
+            {
+                await _service.SaveCustomerChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (_service.CustomerExists(customer.CustomerId))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
         //    return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         //}
@@ -90,15 +91,14 @@ namespace APIProjectGroup1.Controllers
             {
                 return NotFound();
             }
-
-            await _service.RemoveCustomerAsync(customer);
-
             return NoContent();
         }
 
-        //private bool CustomerExists(string id)
-        //{
-        //    return _context.Customers.Any(e => e.CustomerId == id);
-        //}
+        [HttpGet("CustomersWithMostorders")]
+        public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
+        {
+            var customers = await _service.GetCustomersWithMostOrders(n);
+            return customers.Select(x => Utils.CustomerToDTO(x)).ToList();
+        }
     }
-}
+    }
