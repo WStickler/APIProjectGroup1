@@ -20,7 +20,7 @@ namespace Tests
         {
             var mockObject = new Mock<ICustomerService>();
             _controller = new CustomersController(mockObject.Object);
-            Assert.That(_controller, Is.TypeOf<CustomerController>());
+            Assert.That(_controller, Is.TypeOf<CustomersController>());
         }
     }
 }

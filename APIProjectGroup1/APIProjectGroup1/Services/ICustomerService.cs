@@ -5,7 +5,6 @@ namespace APIProjectGroup1.Services
 {
     public interface ICustomerService
     {
-        List<Customer> GetCustomers();
         Task<Customer> GetCustomerByIdAsync(string CustomerId);
         Task<List<Customer>> GetCustomerBySearchTerm(string SearchTerm);
         Task CreateCustomerAsync(Customer c);
@@ -14,6 +13,6 @@ namespace APIProjectGroup1.Services
         Task RemoveCustomerAsync(Customer c);
 
         bool CustomerExists(string id);
-        Task<ActionResult<IEnumerable<Customer>>> GetCustomersAsync();
+        Task<List<Customer>> GetCustomersAsync();
     }
 }

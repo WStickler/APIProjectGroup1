@@ -58,7 +58,7 @@ namespace APIProjectGroup1.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSupplier(string id, CustomerDTO customerDto)
+        public async Task<IActionResult> PutCustomer(string id, CustomerDTO customerDto)
         {
             //The id in the URI has to match the URI in the JSON request body we send
 

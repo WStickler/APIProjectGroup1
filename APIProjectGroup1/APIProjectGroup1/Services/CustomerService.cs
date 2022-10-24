@@ -63,7 +63,7 @@ namespace APIProjectGroup1.Services
 
         public async Task SaveCustomerChangesAsync()
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();
         }
     }
 }
