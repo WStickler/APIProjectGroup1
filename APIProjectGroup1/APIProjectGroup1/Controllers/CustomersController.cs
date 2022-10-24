@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIProjectGroup1.Models;
+using APIProjectGroup1.Services;
 
 namespace APIProjectGroup1.Controllers
 {
@@ -13,25 +14,25 @@ namespace APIProjectGroup1.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly NorthwindContext _context;
+        private ICustomerService _service;
 
-        public CustomersController(NorthwindContext context)
+        public CustomersController(ICustomerService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: api/Customers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
-            return await _context.Customers.ToListAsync();
+            return await _service.GetCustomersAsync();
         }
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(string id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _service.GetCustomerByIdAsync(id);
 
             if (customer == null)
             {
@@ -41,81 +42,18 @@ namespace APIProjectGroup1.Controllers
             return customer;
         }
 
-        // PUT: api/Customers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(string id, Customer customer)
+        // GET: api/Customers/Search?searchterm=Karl (Searches if "Karl" is in customerId, contactName.
+        [HttpGet("Search")]
+        public async Task<List<Customer>> GetCustomerBySearch(string searchTerm = "")
         {
-            if (id != customer.CustomerId)
+            var customerList = await _service.GetCustomerBySearchTerm(searchTerm);
+
+            if (customerList == null)
             {
-                return BadRequest();
+                return new List<Customer>();
             }
 
-            _context.Entry(customer).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Customers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
-        {
-            _context.Customers.Add(customer);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (CustomerExists(customer.CustomerId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
-        }
-
-        // DELETE: api/Customers/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(string id)
-        {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool CustomerExists(string id)
-        {
-            return _context.Customers.Any(e => e.CustomerId == id);
+            return customerList;
         }
     }
 }
