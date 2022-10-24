@@ -91,6 +91,9 @@ namespace APIProjectGroup1.Controllers
             {
                 return NotFound();
             }
+
+            await _service.RemoveCustomerAsync(customer);
+
             return NoContent();
         }
 
