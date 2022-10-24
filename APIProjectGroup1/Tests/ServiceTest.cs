@@ -56,7 +56,7 @@ namespace Tests
                 ContactTitle = "Mr",
                 Country = "UK"
             };
-            await _service.AddCustomer(customerToAdd);
+            await _service.CreateCustomerAsync(customerToAdd);
             var customersAfterAdding = _context.Customers.Count();
             Assert.That(customersBeforeAdding + 1, Is.EqualTo(customersAfterAdding));
 
@@ -76,7 +76,7 @@ namespace Tests
                 ContactTitle = "Mr",
                 Country = "UK"
             };
-            await _service.AddCustomer(customerToAdd);
+            await _service.CreateCustomerAsync(customerToAdd);
             Assert.That(_context.Customers.Contains(customerToAdd));
 
             _context.Customers.Remove(customerToAdd);
@@ -115,7 +115,7 @@ namespace Tests
         public async Task GetCustomerById_ReturnsCorrectCustomer()
         {
             var customerContext = _context.Customers.Find("SERG");
-            var customerService = _service.GetCustomerByIdAsync("SERG");
+            var customerService = await _service.GetCustomerByIdAsync("SERG");
 
             Assert.That(customerContext, Is.EqualTo(customerService));
         }

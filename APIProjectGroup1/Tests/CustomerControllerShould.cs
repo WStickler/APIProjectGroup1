@@ -22,7 +22,5 @@ namespace Tests
             _controller = new CustomersController(mockObject.Object);
             Assert.That(_controller, Is.TypeOf<CustomerController>());
         }
-
-
     }
 }
