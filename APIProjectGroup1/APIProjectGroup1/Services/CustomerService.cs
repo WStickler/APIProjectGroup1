@@ -31,7 +31,8 @@ namespace APIProjectGroup1.Services
 
         public async Task RemoveCustomerAsync(Customer c)
         {
-            throw new NotImplementedException();
+            _context.Customers.Remove(c);
+            await _context.SaveChangesAsync();
         }
 
         public async Task SaveCustomerChangesAsync()

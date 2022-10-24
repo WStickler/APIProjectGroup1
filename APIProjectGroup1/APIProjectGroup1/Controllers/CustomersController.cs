@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIProjectGroup1.Models;
+using APIProjectGroup1.Services;
 
 namespace APIProjectGroup1.Controllers
 {
@@ -14,6 +15,12 @@ namespace APIProjectGroup1.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly NorthwindContext _context;
+        private readonly ICustomerService _service;
+
+        public CustomersController(ICustomerService service)
+        {
+            _service = service;
+        }
 
         public CustomersController(NorthwindContext context)
         {
@@ -107,8 +114,7 @@ namespace APIProjectGroup1.Controllers
                 return NotFound();
             }
 
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
+            await _service.RemoveCustomerAsync(customer);
 
             return NoContent();
         }
