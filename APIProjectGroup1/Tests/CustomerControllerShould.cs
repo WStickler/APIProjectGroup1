@@ -24,6 +24,8 @@ namespace Tests
             var mockObject = new Mock<ICustomerService>();
             _controller = new CustomersController(mockObject.Object);
             Assert.That(_controller, Is.TypeOf<CustomersController>());
+<<<<<<< HEAD
+=======
         }
         [Category("Create")]
         [Category("Happy Path")]
@@ -55,6 +57,7 @@ namespace Tests
             var result = await _controller.GetCustomer(It.IsAny<string>());
 
             Assert.That(result.Value, Is.TypeOf<Customer>());
+>>>>>>> dev
         }
     }
 }
