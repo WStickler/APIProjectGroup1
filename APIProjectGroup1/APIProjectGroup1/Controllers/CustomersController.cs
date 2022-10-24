@@ -62,14 +62,14 @@ namespace APIProjectGroup1.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            _context.Customers.Add(customer);
+            _service.CreateCustomerAsync(customer);
             try
             {
-                await _context.SaveChangesAsync();
+                await _service.SaveCustomerChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (CustomerExists(customer.CustomerId))
+                if (_service.CustomerExists(customer.CustomerId))
                 {
                     return Conflict();
                 }
@@ -91,7 +91,7 @@ namespace APIProjectGroup1.Controllers
             {
                 return NotFound();
             }
-            return NoContent()
+            return NoContent();
         }
 
         [HttpGet("CustomersWithMostorders")]
