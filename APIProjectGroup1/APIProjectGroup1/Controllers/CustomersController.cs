@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIProjectGroup1.Models;
+using APIProjectGroup1.Services;
 
 namespace APIProjectGroup1.Controllers
 {
@@ -13,11 +14,17 @@ namespace APIProjectGroup1.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly NorthwindContext _context;
+        private readonly NorthwindContext _context = new NorthwindContext();
+        private ICustomerService _service;
 
-        public CustomersController(NorthwindContext context)
+        public CustomersController()
         {
-            _context = context;
+            _service = new CustomerService();
+        }
+
+        public CustomersController(ICustomerService service)
+        {
+            _service = service;
         }
 
         // GET: api/Customers
