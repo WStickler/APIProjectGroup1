@@ -10,5 +10,7 @@ namespace APIProjectGroup1.Services
         Task CreateCustomerAsync(Customer c);
         Task SaveCustomerChangesAsync();
         Task RemoveCustomerAsync(Customer c);
+
+        bool CustomerExists(string id);
     }
 }

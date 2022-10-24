@@ -55,5 +55,50 @@ namespace APIProjectGroup1.Controllers
 
             return customerList;
         }
+
+        // POST: api/Customers
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        {
+            _context.Customers.Add(customer);
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (CustomerExists(customer.CustomerId))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
+        }
+
+        // DELETE: api/Customers/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCustomer(string id)
+        {
+            var customer = await _service.GetCustomerByIdAsync(id);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            await _service.RemoveCustomerAsync(customer);
+
+            return NoContent();
+        }
+
+        private bool CustomerExists(string id)
+        {
+            return _context.Customers.Any(e => e.CustomerId == id);
+        }
     }
 }

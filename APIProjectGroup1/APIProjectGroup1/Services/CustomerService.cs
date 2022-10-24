@@ -25,6 +25,11 @@ namespace APIProjectGroup1.Services
             return await _context.Customers.ToListAsync();
         }
 
+        public bool CustomerExists(string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Customer> GetCustomerByIdAsync(string CustomerId)
         {
             return await _context.Customers.FindAsync(CustomerId);
@@ -41,7 +46,8 @@ namespace APIProjectGroup1.Services
 
         public async Task RemoveCustomerAsync(Customer c)
         {
-            throw new NotImplementedException();
+            _context.Customers.Remove(c);
+            await _context.SaveChangesAsync();
         }
 
         public async Task SaveCustomerChangesAsync()
