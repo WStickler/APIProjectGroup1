@@ -29,7 +29,7 @@ namespace APIProjectGroup1.Services
 
         public bool CustomerExists(string id)
         {
-            throw new NotImplementedException();
+            return (bool)(_context.Customers?.Any(c => c.CustomerId == id));
         }
 
         public async Task<Customer> GetCustomerByIdAsync(string CustomerId)
@@ -62,7 +62,7 @@ namespace APIProjectGroup1.Services
 
         public async Task SaveCustomerChangesAsync()
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();
         }
 
         public List<Customer> GetCustomers()
