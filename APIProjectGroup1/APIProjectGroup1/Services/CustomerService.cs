@@ -64,11 +64,6 @@ namespace APIProjectGroup1.Services
         }
 
 
-        public async Task<List<Customer>> GetCustomers()
-        {
-            return await _context.Customers.ToListAsync();
-        }
-
 
     }
 }
