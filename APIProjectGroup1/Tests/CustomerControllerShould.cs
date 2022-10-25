@@ -56,7 +56,6 @@ namespace Tests
 
             Assert.That(result.Value, Is.Null);
         }
-        [Ignore("Something is broken")]
         [Category("Get Customer By Search")]
         [Category("Happy Path")]
         [Test]
@@ -70,9 +69,9 @@ namespace Tests
             x.GetCustomersAsync().Result)
                 .Returns(new List<Customer>() { customer, customer2 });
 
-            var result = await _controller.GetCustomerBySearch(It.IsAny<string>());
+            var result = await _controller.GetCustomerBySearch("SERG");
 
-            Assert.That(result, Is.EqualTo(new List<Customer>() { customer, customer2 }));
+            Assert.That(result, Is.EqualTo(new List<Customer>() { customer }));
             Assert.That(result, Is.TypeOf<List<Customer>>());
         }
         [Category("Get Customer By Search")]
