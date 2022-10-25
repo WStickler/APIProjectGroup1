@@ -93,16 +93,17 @@ namespace APIProjectGroup1.Controllers
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(string id)
+        public async Task<ActionResult<CustomerDTO>> GetCustomer(string id)
         {
             var customer = await _service.GetCustomerByIdAsync(id);
+            var customerDto = Utils.CustomerToDTO(customer);
 
             if (customer == null)
             {
                 return NotFound();
             }
 
-            return customer;
+            return customerDto;
         }
 
         // GET: api/Customers/Search?searchterm=Karl (Searches if "Karl" is in customerId, contactName. Case-Insensitive
