@@ -15,7 +15,7 @@ To use our API, you will have the opportunity to ...
 For our Get methods we have decided to include an option to search for a specific customer by name/id/?. We have also included the ability for someone to filter and get the results based on city, to allow for marketing teams to have a better understnading of where the may need to target their advertising. By including the orders table we have also made it possible to search for a customer and the get methods will return all orders for that particualr customer allowing for someone to find a particular order quickly. Including this table has also allowed for us to filter the data by numbers of orders a customer has made or when we also include the order details table we can filter by price to see which customers have spent the most money
 
 ### **Post Method:**
-The post method allows users to add new customers. It has a CustomerDTO object parameter, which is passed in from the HTTP request body, in which the CustomerID is required to create the customer, but other details can be added too. The DTO is then converted to a Customer and created in the service layer. A 201 Created status code is returned if successful, otherwise a 409 conflict is returned if they already exist.
+The post method allows users to add new customers. It has a Customer object parameter, which is passed in from the HTTP request body, in which the CustomerID is required to create the customer, but other details can be added too. A 201 Created status code is returned if successful, otherwise a 409 conflict is returned if they already exist.
 
 ### **Put Methods:**
 For our Put methods we have decide to include the ability for a customer to update their details in case they change address.
