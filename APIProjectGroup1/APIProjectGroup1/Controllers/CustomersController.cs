@@ -154,7 +154,7 @@ namespace APIProjectGroup1.Controllers
             Customer customer = await _service.GetCustomerByIdAsync(id);
 
             customer.CompanyName = customerDto.CompanyName ?? customer.CompanyName;
-            customer.ContactName = customerDto.Name ?? customer.ContactName;
+            customer.ContactName = customerDto.ContactName ?? customer.ContactName;
             customer.ContactTitle = customerDto.ContactTitle ?? customer.ContactTitle;
             customer.Country = customerDto.Country ?? customer.Country;
 
