@@ -1,4 +1,5 @@
 # APIProjectGroup1
+[![Coverage Status](https://coveralls.io/repos/github/WStickler/APIProjectGroup1/badge.svg)](https://coveralls.io/github/WStickler/APIProjectGroup1)
 
 This is the API pproject for group1, which includes Adam Millard, Sergiusz, Syed, William, Ameer and Max.
 
