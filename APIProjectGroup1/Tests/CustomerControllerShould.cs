@@ -17,9 +17,6 @@ namespace Tests
     {
         private CustomersController _controller;
 
-<<<<<<< HEAD
-       
-=======
         [Category("Controller Constructor")]
         [Category("Happy Path")]
         [Test]
@@ -60,6 +57,5 @@ namespace Tests
 
             Assert.That(result.Value, Is.TypeOf<Customer>());
         }
->>>>>>> dev
     }
 }
