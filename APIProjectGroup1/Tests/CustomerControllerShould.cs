@@ -93,17 +93,18 @@ namespace Tests
 
             Assert.That(result, Is.EqualTo(new List<CustomerDTO>()));
         }
-        [Ignore("Not implemented")]
         [Category("Post Customer")]
         [Category("Happy Path")]
         [Test]
         public async Task GivenCustomer_WhichIsNotInTheDatabase_ReturnsCreatedAtAction()
         {
             var mockObject = new Mock<ICustomerService>();
-            var customer = new Customer() { CustomerId = "SERG", ContactName = "Sergiusz Pietrala" };
             _controller = new CustomersController(mockObject.Object);
-            //mockObject.Setup(x =>
-            //x.CreateCustomerAsync(It.IsAny<Customer>()))
+
+            await _controller.PostCustomer(new Customer() { CustomerId = "SERG"});
+
+            mockObject.Verify(x => x.CreateCustomerAsync(It.IsAny<Customer>()), Times.Once);
+            mockObject.Verify(x => x.SaveCustomerChangesAsync(), Times.Once);
         }
         [Category("Delete Customer")]
         [Category("Happy Path")]
@@ -145,13 +146,24 @@ namespace Tests
             var mockObject = new Mock<ICustomerService>();
             var customer = new CustomerDTO() { Id = "SERG", ContactName = "Sergiusz Pietrala" };
             _controller = new CustomersController(mockObject.Object);
+
+            var result = await _controller.PutCustomer("NULL", customer);
+
+            Assert.That(result, Is.TypeOf<BadRequestResult>());
+        }
+        [Category("Customer With Most Orders")]
+        [Category("Sad Path")]
+        [Test]
+        public async Task GivenNumber_GiveThatManyCustomersWithMostOrders()
+        {
+            var mockObject = new Mock<ICustomerService>();
+            _controller = new CustomersController(mockObject.Object);
             mockObject.Setup(x =>
-            x.GetCustomerByIdAsync(It.IsAny<string>()).Result)
-                .Returns(new Customer() { CustomerId = "SERG" });
+            x.GetCustomersAsync().Result).Returns(new List<Customer>());
 
-            await _controller.PutCustomer("SERG", customer);
+            var list = await _controller.GetCustomersWithMostOrders(It.IsAny<int>());
 
-            mockObject.Verify(x => x.SaveCustomerChangesAsync(), Times.Once());
+            mockObject.Verify(x => x.GetCustomersAsync(), Times.Once());
         }
     }
 }
