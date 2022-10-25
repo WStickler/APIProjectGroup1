@@ -221,10 +221,15 @@ namespace APIProjectGroup1.Controllers
         }
 
         [HttpGet("CustomersWithMostorders")]
-        public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
+        public List<CustomerDTO> GetCustomersWithMostOrders(int n)
         {
             var customers = _service.GetCustomersAsync().Result
+<<<<<<< HEAD
                 .Select(x => Utils.CustomerToDTO(x)).ToList();
+=======
+                .OrderByDescending(x=>x.Orders.Count).Take(n)
+                .Select(x=>Utils.CustomerToDTO(x)).ToList();
+>>>>>>> ameer
             return customers;
         }
         private bool CustomerExists(string id)
