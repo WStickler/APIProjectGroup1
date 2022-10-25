@@ -91,6 +91,7 @@ namespace APIProjectGroup1.Controllers
         }
         #endregion
 
+        #region api/Customer/{id}
         // GET: api/Customers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerDTO>> GetCustomer(string id)
@@ -105,35 +106,42 @@ namespace APIProjectGroup1.Controllers
 
             return customerDto;
         }
+        #endregion
 
-        // GET: api/Customers/Search?searchterm=Karl (Searches if "Karl" is in customerId, contactName. Case-Insensitive
+        #region api/Customer/Search
+        // GET: api/Customers/Search?searchterm=Karl (Searches if "Karl" is in customerId, contactName, companyName. Case-Insensitive
         [HttpGet("Search")]
-        public async Task<List<Customer>> GetCustomerBySearch(string searchTerm = "")
+        public async Task<List<CustomerDTO>> GetCustomerBySearch(string searchTerm = "")
         {
-            List<Customer> outputList = new List<Customer>();
+            List<CustomerDTO> outputList = new List<CustomerDTO>();
             var customerList = await _service.GetCustomersAsync();
 
             if (customerList == null)
             {
-                return new List<Customer>();
+                return new List<CustomerDTO>();
             }
 
             foreach (var customer in customerList)
             {
-                var nomalisedSearchTerm = searchTerm.ToLower().Trim();
+                var normalisedSearchTerm = searchTerm.ToLower().Trim();
 
-                if (customer.CustomerId != null && customer.CustomerId.ToLower().Contains(nomalisedSearchTerm))
+                if (customer.CustomerId != null && customer.CustomerId.ToLower().Contains(normalisedSearchTerm))
                 {
-                    outputList.Add(customer);
+                    outputList.Add(Utils.CustomerToDTO(customer));
                 }
-                else if (customer.ContactName != null && customer.ContactName.ToLower().Contains(nomalisedSearchTerm))
+                else if (customer.ContactName != null && customer.ContactName.ToLower().Contains(normalisedSearchTerm))
                 {
-                    outputList.Add(customer);
+                    outputList.Add(Utils.CustomerToDTO(customer));
+                }
+                else if (customer.CompanyName != null && customer.CompanyName.ToLower().Contains(normalisedSearchTerm))
+                {
+                    outputList.Add(Utils.CustomerToDTO(customer));
                 }
             }
 
             return outputList;
         }
+        #endregion
 
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(string id, CustomerDTO customerDto)
