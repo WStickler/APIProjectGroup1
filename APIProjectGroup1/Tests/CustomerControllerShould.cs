@@ -16,10 +16,6 @@ namespace Tests
     public class CustomerControllerShould
     {
         private CustomersController _controller;
-
-<<<<<<< HEAD
-       
-=======
         [Category("Controller Constructor")]
         [Category("Happy Path")]
         [Test]
@@ -71,7 +67,7 @@ namespace Tests
             var customer2 = new Customer() { CustomerId = "SYED", ContactName = "Syed Ahmed" };
             _controller = new CustomersController(mockObject.Object);
             mockObject.Setup(x =>
-            x.GetCustomerBySearchTerm(It.IsAny<string>()).Result)
+            x.GetCustomersAsync().Result)
                 .Returns(new List<Customer>() { customer, customer2 });
 
             var result = await _controller.GetCustomerBySearch(It.IsAny<string>());
@@ -87,7 +83,7 @@ namespace Tests
             var mockObject = new Mock<ICustomerService>();
             _controller = new CustomersController(mockObject.Object);
             mockObject.Setup(x =>
-            x.GetCustomerBySearchTerm(It.IsAny<string>()).Result)
+            x.GetCustomersAsync().Result)
                 .Returns((List<Customer>)null);
 
             var result = await _controller.GetCustomerBySearch(It.IsAny<string>());
@@ -107,6 +103,5 @@ namespace Tests
             //x.CreateCustomerAsync(It.IsAny<Customer>()))
             //    .Returns();
         }
->>>>>>> dev
     }
 }
