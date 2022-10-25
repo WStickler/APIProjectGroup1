@@ -13,6 +13,7 @@ namespace APIProjectGroup1.Controllers
                 ContactName = c.ContactName,
                 CompanyName = c.CompanyName,
                 City = c.City,
+                Region = c.Region,
                 Country = c.Country,
                 TotalOrder = c.Orders.Count(),
                 Orders = c.Orders.Select(o => OrderToDTO(o)).ToList()
