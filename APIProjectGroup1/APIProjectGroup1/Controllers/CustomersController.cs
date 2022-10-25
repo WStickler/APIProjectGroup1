@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIProjectGroup1.Models;
+using APIProjectGroup1.Services;
+using APIProjectGroup1.Models.DTOs;
+using System.Runtime.InteropServices;
 
 namespace APIProjectGroup1.Controllers
 {
@@ -13,53 +16,158 @@ namespace APIProjectGroup1.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly NorthwindContext _context;
+        private ICustomerService _service;
 
-        public CustomersController(NorthwindContext context)
+        public CustomersController(ICustomerService service)
         {
-            _context = context;
+            _service = service;
         }
 
-        // GET: api/Customers
+        #region api/Customers
+        public class GetCustomersParams
+        {
+            public string? ContactTitle { get; set; }
+            public string? City { get; set; }
+            public string? Region { get; set; }
+            public string? Country { get; set; }
+
+            public bool AreAllFieldsNull()
+            {
+                if (ContactTitle == null &&
+                    City == null &&
+                    Region == null &&
+                    Country == null)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        // GET: api/Customers allows for filtering by using query params i.e. api/Customer?City=London&Country=UK
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<IEnumerable<CustomerDTO>>> GetCustomers([FromQuery] GetCustomersParams customerParams)
         {
-            return await _context.Customers.ToListAsync();
+            List<CustomerDTO> customerDtoList = new List<CustomerDTO>();
+            var customerList = await _service.GetCustomersAsync();
+            customerList.ForEach(c => customerDtoList.Add(Utils.CustomerToDTO(c)));
+
+            if (customerParams.AreAllFieldsNull())
+            {
+                return customerDtoList;
+            }
+
+            List<CustomerDTO> outputList = new List<CustomerDTO>();
+            foreach (var customer in customerDtoList) // Checks that all non-null params are true. if so adds to outputList.
+            {
+                bool addToOutput = true;
+
+                if (customerParams.ContactTitle != null && !IsParamInString(customerParams.ContactTitle, customer.ContactTitle))
+                    addToOutput = false;
+
+                if (customerParams.City != null && !IsParamInString(customerParams.City, customer.City))
+                    addToOutput = false;
+
+                if (customerParams.Region != null && !IsParamInString(customerParams.Region, customer.Region))
+                    addToOutput = false;
+
+                if (customerParams.Country != null && !IsParamInString(customerParams.Country, customer.Country))
+                    addToOutput = false;
+
+
+                if (addToOutput)
+                    outputList.Add(customer);
+            }
+
+            return outputList;
         }
 
+        private bool IsParamInString(string param, string? customerPropString)
+        {
+            if (customerPropString != null && customerPropString == param)
+                return true;
+            else
+                return false;
+        }
+        #endregion
+
+        #region api/Customer/{id}
         // GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(string id)
+        public async Task<ActionResult<CustomerDTO>> GetCustomer(string id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _service.GetCustomerByIdAsync(id);
+            var customerDto = Utils.CustomerToDTO(customer);
 
             if (customer == null)
             {
                 return NotFound();
             }
 
-            return customer;
+            return customerDto;
         }
+        #endregion
 
-        // PUT: api/Customers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(string id, Customer customer)
+        #region api/Customer/Search
+        // GET: api/Customers/Search?searchterm=Karl (Searches if "Karl" is in customerId, contactName, companyName. Case-Insensitive
+        [HttpGet("Search")]
+        public async Task<List<CustomerDTO>> GetCustomerBySearch(string searchTerm = "")
         {
-            if (id != customer.CustomerId)
+            List<CustomerDTO> outputList = new List<CustomerDTO>();
+            var customerList = await _service.GetCustomersAsync();
+
+            if (customerList == null)
+            {
+                return new List<CustomerDTO>();
+            }
+
+            foreach (var customer in customerList)
+            {
+                var normalisedSearchTerm = searchTerm.ToLower().Trim();
+
+                if (customer.CustomerId != null && customer.CustomerId.ToLower().Contains(normalisedSearchTerm))
+                {
+                    outputList.Add(Utils.CustomerToDTO(customer));
+                }
+                else if (customer.ContactName != null && customer.ContactName.ToLower().Contains(normalisedSearchTerm))
+                {
+                    outputList.Add(Utils.CustomerToDTO(customer));
+                }
+                else if (customer.CompanyName != null && customer.CompanyName.ToLower().Contains(normalisedSearchTerm))
+                {
+                    outputList.Add(Utils.CustomerToDTO(customer));
+                }
+            }
+
+            return outputList;
+        }
+        #endregion
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCustomer(string id, CustomerDTO customerDto)
+        {
+            //The id in the URI has to match the URI in the JSON request body we send
+
+            if (id != customerDto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(customer).State = EntityState.Modified;
+            Customer customer = await _service.GetCustomerByIdAsync(id);
+
+            customer.CompanyName = customerDto.CompanyName ?? customer.CompanyName;
+            customer.ContactName = customerDto.ContactName ?? customer.ContactName;
+            customer.ContactTitle = customerDto.ContactTitle ?? customer.ContactTitle;
+            customer.Country = customerDto.Country ?? customer.Country;
+
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _service.SaveCustomerChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CustomerExists(id))
+                if (!_service.CustomerExists(id))
                 {
                     return NotFound();
                 }
@@ -77,14 +185,14 @@ namespace APIProjectGroup1.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            _context.Customers.Add(customer);
+            await _service.CreateCustomerAsync(customer);
             try
             {
-                await _context.SaveChangesAsync();
+                await _service.SaveCustomerChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (CustomerExists(customer.CustomerId))
+                if (_service.CustomerExists(customer.CustomerId))
                 {
                     return Conflict();
                 }
@@ -101,21 +209,23 @@ namespace APIProjectGroup1.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(string id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _service.GetCustomerByIdAsync(id);
             if (customer == null)
             {
                 return NotFound();
             }
 
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
+            await _service.RemoveCustomerAsync(customer);
 
             return NoContent();
         }
 
-        private bool CustomerExists(string id)
+        [HttpGet("CustomersWithMostorders")]
+        public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
         {
-            return _context.Customers.Any(e => e.CustomerId == id);
+            var customers = _service.GetCustomersAsync().Result
+                .Select(x => Utils.CustomerToDTO(x)).ToList();
+            return customers;
         }
     }
 }
