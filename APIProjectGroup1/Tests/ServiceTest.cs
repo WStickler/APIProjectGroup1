@@ -157,15 +157,5 @@ namespace Tests
 
             Assert.That(result, Is.EqualTo(expected));
         }
-        [Category("GetCustomerWithMostOrders")]
-        [Category("Happy Path")]
-        [Test]
-        public async Task GetCustomerWithMostOrdersReturnsCorrectCustomerAsync()
-        {
-            var result = await _service.GetCustomersWithMostOrders(1);
-
-            Assert.That(result.Count(), Is.EqualTo(1));
-
-        }
     }
 }
