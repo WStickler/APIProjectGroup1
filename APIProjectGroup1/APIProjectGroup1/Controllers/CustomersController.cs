@@ -224,7 +224,8 @@ namespace APIProjectGroup1.Controllers
         public async Task<ActionResult<List<CustomerDTO>>> GetCustomersWithMostOrders(int n)
         {
             var customers = _service.GetCustomersAsync().Result
-                .Select(x => Utils.CustomerToDTO(x)).ToList();
+            .OrderByDescending(x=>x.Orders.Count).Take(n)
+                .Select(x=>Utils.CustomerToDTO(x)).ToList();
             return customers;
         }
     }
