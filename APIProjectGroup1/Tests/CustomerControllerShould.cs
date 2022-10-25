@@ -99,8 +99,24 @@ namespace Tests
             var customer = new Customer() { CustomerId = "SERG", ContactName = "Sergiusz Pietrala" };
             _controller = new CustomersController(mockObject.Object);
             //mockObject.Setup(x =>
-            //x.CreateCustomerAsync(It.IsAny<Customer>()))
-            //    .Returns();
+            //x.CreateCustomerAsync(It.IsAny<Customer>()).)
+            //    .Returns(new Customer());
+        }
+        [Category("Delete Customer")]
+        [Category("Happy Path")]
+        [Test]
+        public async Task GivenCorrectCustomer_DeleteItFromDatabaseAsync()
+        {
+            var mockObject = new Mock<ICustomerService>();
+            var customer = new Customer() { CustomerId = "SERG", ContactName = "Sergiusz Pietrala" };
+            _controller = new CustomersController(mockObject.Object);
+            mockObject.Setup(x =>
+            x.GetCustomerByIdAsync(It.IsAny<string>()).Result)
+                .Returns(customer);
+
+            await _controller.DeleteCustomer("SERG");
+
+            mockObject.Verify(x => x.RemoveCustomerAsync(customer), Times.Once());
         }
     }
 }
