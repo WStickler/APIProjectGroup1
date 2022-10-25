@@ -1,6 +1,7 @@
 # APIProjectGroup1
 [![Coverage Status](https://coveralls.io/repos/github/WStickler/APIProjectGroup1/badge.svg)](https://coveralls.io/github/WStickler/APIProjectGroup1)
 [![Unit Testing + Code Coverage](https://github.com/WStickler/APIProjectGroup1/actions/workflows/dotnet.yml/badge.svg)](https://github.com/WStickler/APIProjectGroup1/actions/workflows/dotnet.yml)
+
 This is the API pproject for group1, which includes Adam Millard, Sergiusz, Syed, William, Ameer and Max.
 
 ## **About the Project**
