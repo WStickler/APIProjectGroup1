@@ -16,6 +16,7 @@ namespace Tests
     public class CustomerControllerShould
     {
         private CustomersController _controller;
+
         [Category("Controller Constructor")]
         [Category("Happy Path")]
         [Test]

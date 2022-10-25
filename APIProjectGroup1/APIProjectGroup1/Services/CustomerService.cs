@@ -53,13 +53,5 @@ namespace APIProjectGroup1.Services
         {
             await _context.SaveChangesAsync();
         }
-
-
-        public async Task<List<Customer>> GetCustomers()
-        {
-            return await _context.Customers.ToListAsync();
-        }
-
-
     }
 }
