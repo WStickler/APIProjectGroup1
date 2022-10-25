@@ -5,12 +5,7 @@
 This is the API pproject for group1, which includes Adam Millard, Sergiusz, Syed, William, Ameer and Max.
 
 ## **About the Project**
-We were tasked with implementing a restful API for the customers table of the Northwind database. We aimed our API at the Customer service, sales and marketing teams for businesses. This is because we feel like they are the most likely to interact with data on customers, be it to access details about customers ordering patterns or to access details about the distribution of customers. 
-
-To accomplish our task, we have introduced a service layer, DTO's, a controller and we are utilising *swagger check ?* to use our API.
-
-## **Using the Api**
-To use our API, you will have the opportunity to ...
+We were tasked with implementing a restful API for the customers table of the Northwind database. We aimed our API at the Customer service, sales and marketing teams for businesses. This is because we feel like they are the most likely to interact with data on customers, be it to access details about customers ordering patterns or to access details about the distribution of customers. To accomplish our task, we have introduced a service layer, DTO's, a controller.
 
 ## **Our Methods**
 ### **Get Methods:**
@@ -20,7 +15,7 @@ For our Get methods we have decided to include an option to search for a specifi
 The post method allows users to add new customers. It has a Customer object parameter, which is passed in from the HTTP request body, in which the CustomerID is required to create the customer, but other details can be added too. A 201 Created status code is returned if successful, otherwise a 409 conflict is returned if they already exist.
 
 ### **Put Methods:**
-For our Put methods we have decide to include the ability for a customer to update their details in case they change address.
+For our Put methods we have decide to include the ability for a customer to update their details in case they need to chnage their location or place of work.
 
 ### **Delete Method:**
 For our Delete method we have decided to include the option for a user to be able to remove a customer from the database so we no longer store the account details. The CustomerController delete method has a string ID parameter, taken from the HTTP request. It gets the customer using the service layer and deletes the selected customer, returning a status code 204 No Content if successful, or a 404 Not Found if the user can't be located.
