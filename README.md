@@ -24,3 +24,118 @@ For our Put methods we have decide to include the ability for a customer to upda
 For our Delete method we have decided to include the option for a user to be able to remove a customer from the database so we no longer store the account details. The CustomerController delete method has a string ID parameter, taken from the HTTP request. It gets the customer using the service layer and deletes the selected customer, returning a status code 204 No Content if successful, or a 404 Not Found if the user can't be located.
 
 
+# Customers API Reference
+## Consumes
+`application/json`
+
+## Produces
+`application/json`
+
+## Operations
+[getCustomers](#get-customers)<br>
+[getCustomers_Id](#get-customerid)<br>
+[getCustomers_Search](#get-customersearch)
+
+## Paths
+### GET /Customers
+#### Operation: getCustomers
+#### Description
+Returns a list of all customers but can be filtered with parameters.
+#### Parameters
+
+| Type          | Name          | Description   | Schema        |
+| ------------- | ------------- | ------------- | ------------- |
+| Query         | ContactTitle  |This is an _optional_ parameter that is used to filter by.|string|
+| Query         | City          |This is an _optional_ parameter that is used to filter by.|string|
+| Query         | Region        |This is an _optional_ parameter that is used to filter by.|string|
+| Query         | Country       |This is an _optional_ parameter that is used to filter by.|string|
+#### Response
+```json
+[
+    {
+        "id": "ALFKI",
+        "contactTitle": "Sales Representative",
+        "contactName": "Maria Anders",
+        "companyName": "Alfreds Futterkiste",
+        "city": "Berlin",
+        "region": null,
+        "country": "Germany",
+        "totalOrder": 0,
+        "orders": []
+    },
+    {
+        "id": "AROUT",
+        "contactTitle": "Sales Representative",
+        "contactName": "Thomas Hardy",
+        "companyName": "Around the Horn",
+        "city": "London",
+        "region": null,
+        "country": "UK",
+        "totalOrder": 0,
+        "orders": []
+    },
+    {
+        ...
+    }
+]
+```
+
+### GET /Customer/{id}
+#### Operation: getCustomers_Id
+#### Description
+Returns a single customer
+#### Parameters
+This endpoint takes no parameters.
+#### Response
+```json
+{
+    "id": "ALFKI",
+    "contactTitle": "Sales Representative",
+    "contactName": "Maria Anders",
+    "companyName": "Alfreds Futterkiste",
+    "city": "Berlin",
+    "region": null,
+    "country": "Germany",
+    "totalOrder": 0,
+    "orders": []
+}
+```
+
+### GET /Customer/Search
+#### Operation: getCustomers_Search
+#### Description
+Returns a list of all customers that match the 'searchTerm'. The search looks for if the search term is found in the CustomerId, ContactName and CompanyName columns (case-insensitive).
+#### Parameters
+| Type          | Name          | Description   | Schema        |
+| ------------- | ------------- | ------------- | ------------- |
+| Query         | SearchTerm    |This is an _required_ parameter that is used to search by.|string|
+#### Response
+```json
+[
+    {
+        "id": "AROUT",
+        "contactTitle": "Sales Representative",
+        "contactName": "Thomas Hardy",
+        "companyName": "Around the Horn",
+        "city": "London",
+        "region": null,
+        "country": "UK",
+        "totalOrder": 0,
+        "orders": []
+    },
+    {
+        "id": "BLAUS",
+        "contactTitle": "Sales Representative",
+        "contactName": "Hanna Moos",
+        "companyName": "Blauer See Delikatessen",
+        "city": "Mannheim",
+        "region": null,
+        "country": "Germany",
+        "totalOrder": 0,
+        "orders": []
+    },
+    {
+        ...
+    }
+]
+```
