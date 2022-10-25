@@ -38,15 +38,6 @@ namespace APIProjectGroup1.Services
             return await _context.Customers.FindAsync(CustomerId);
         }
 
-        public async Task<List<Customer>> GetCustomerBySearchTerm(string SearchTerm)
-        {
-            return await _context.Customers
-                    .Where(c => 
-                        c.CustomerId.Contains(SearchTerm) ||
-                        c.ContactName.Contains(SearchTerm))
-                    .ToListAsync();
-        }
-
         public async Task<List<Customer>> GetCustomersWithOrders()
         {
             return await _context.Customers.Include(x => x.Orders).ToListAsync();
@@ -62,13 +53,5 @@ namespace APIProjectGroup1.Services
         {
             await _context.SaveChangesAsync();
         }
-
-
-        public async Task<List<Customer>> GetCustomers()
-        {
-            return await _context.Customers.ToListAsync();
-        }
-
-
     }
 }
