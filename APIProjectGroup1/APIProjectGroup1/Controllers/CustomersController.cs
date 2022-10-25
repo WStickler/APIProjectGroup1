@@ -167,7 +167,7 @@ namespace APIProjectGroup1.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CustomerExists(id))
+                if (!_service.CustomerExists(id))
                 {
                     return NotFound();
                 }
@@ -231,10 +231,6 @@ namespace APIProjectGroup1.Controllers
                 .Select(x=>Utils.CustomerToDTO(x)).ToList();
 >>>>>>> ameer
             return customers;
-        }
-        private bool CustomerExists(string id)
-        {
-            return _service.CustomerExists(id);
         }
     }
 }
