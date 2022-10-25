@@ -27,19 +27,15 @@ namespace APIProjectGroup1.Controllers
         public class GetCustomersParams
         {
             public string? ContactTitle { get; set; }
-            public string? Address { get; set; }
             public string? City { get; set; }
             public string? Region { get; set; }
-            public string? PostalCode { get; set; }
             public string? Country { get; set; }
 
             public bool AreAllFieldsNull()
             {
                 if (ContactTitle == null &&
-                    Address == null &&
                     City == null &&
                     Region == null &&
-                    PostalCode == null &&
                     Country == null)
                 {
                     return true;
@@ -50,23 +46,23 @@ namespace APIProjectGroup1.Controllers
 
         // GET: api/Customers allows for filtering by using query params i.e. api/Customer?City=London&Country=UK
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers([FromQuery] GetCustomersParams customerParams)
+        public async Task<ActionResult<IEnumerable<CustomerDTO>>> GetCustomers([FromQuery] GetCustomersParams customerParams)
         {
+            List<CustomerDTO> customerDtoList = new List<CustomerDTO>();
             var customerList = await _service.GetCustomersAsync();
+            customerList.ForEach(c => customerDtoList.Add(Utils.CustomerToDTO(c)));
+
             if (customerParams.AreAllFieldsNull())
             {
-                return customerList;
+                return customerDtoList;
             }
 
-            List<Customer> outputList = new List<Customer>();
-            foreach (var customer in customerList) // Checks that all non-null params are true. if so adds to outputList.
+            List<CustomerDTO> outputList = new List<CustomerDTO>();
+            foreach (var customer in customerDtoList) // Checks that all non-null params are true. if so adds to outputList.
             {
                 bool addToOutput = true;
 
                 if (customerParams.ContactTitle != null && !IsParamInString(customerParams.ContactTitle, customer.ContactTitle))
-                    addToOutput = false;
-
-                if (customerParams.Address != null && !IsParamInString(customerParams.Address, customer.Address))
                     addToOutput = false;
 
                 if (customerParams.City != null && !IsParamInString(customerParams.City, customer.City))
@@ -75,12 +71,9 @@ namespace APIProjectGroup1.Controllers
                 if (customerParams.Region != null && !IsParamInString(customerParams.Region, customer.Region))
                     addToOutput = false;
 
-                if (customerParams.PostalCode != null && !IsParamInString(customerParams.PostalCode, customer.PostalCode))
-                    addToOutput = false;
-
                 if (customerParams.Country != null && !IsParamInString(customerParams.Country, customer.Country))
                     addToOutput = false;
-                
+
 
                 if (addToOutput)
                     outputList.Add(customer);
@@ -100,16 +93,17 @@ namespace APIProjectGroup1.Controllers
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(string id)
+        public async Task<ActionResult<CustomerDTO>> GetCustomer(string id)
         {
             var customer = await _service.GetCustomerByIdAsync(id);
+            var customerDto = Utils.CustomerToDTO(customer);
 
             if (customer == null)
             {
                 return NotFound();
             }
 
-            return customer;
+            return customerDto;
         }
 
         // GET: api/Customers/Search?searchterm=Karl (Searches if "Karl" is in customerId, contactName. Case-Insensitive
