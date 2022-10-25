@@ -41,9 +41,10 @@ namespace Tests
 
             var result = await _controller.GetCustomer(It.IsAny<string>());
 
-            Assert.That(result.Value.ContactName, Is.EqualTo(customer.ContactName));
+            Assert.That(result.Value.Id, Is.EqualTo(customer.CustomerId));
+            Assert.That(result.Value.CompanyName, Is.EqualTo(customer.CompanyName));
         }
-        [Ignore("Not working, work in progress")]
+        [Ignore("Not working properly")]
         [Category("Get Customer")]
         [Category("Sad Path")]
         [Test]
@@ -102,8 +103,7 @@ namespace Tests
             var customer = new Customer() { CustomerId = "SERG", ContactName = "Sergiusz Pietrala" };
             _controller = new CustomersController(mockObject.Object);
             //mockObject.Setup(x =>
-            //x.CreateCustomerAsync(It.IsAny<Customer>()).)
-            //    .Returns(new Customer());
+            //x.CreateCustomerAsync(It.IsAny<Customer>()))
         }
         [Category("Delete Customer")]
         [Category("Happy Path")]
@@ -120,6 +120,38 @@ namespace Tests
             await _controller.DeleteCustomer("SERG");
 
             mockObject.Verify(x => x.RemoveCustomerAsync(customer), Times.Once());
+        }
+        [Category("Put Customer")]
+        [Category("Happy Path")]
+        [Test]
+        public void GivenRightCustomer_PutCustomer()
+        {
+            var mockObject = new Mock<ICustomerService>();
+            var customer = new CustomerDTO() { Id = "SERG", ContactName = "Sergiusz Pietrala" };
+            _controller = new CustomersController(mockObject.Object);
+            mockObject.Setup(x =>
+            x.GetCustomerByIdAsync(It.IsAny<string>()).Result)
+                .Returns(new Customer() { CustomerId = "SERG" });
+
+            _controller.PutCustomer("SERG", customer);
+
+            mockObject.Verify(x => x.SaveCustomerChangesAsync(), Times.Once());
+        }
+        [Category("Put Customer")]
+        [Category("Sad Path")]
+        [Test]
+        public async Task GivenInvalidCustomer_ThrowBadRequestAsync()
+        {
+            var mockObject = new Mock<ICustomerService>();
+            var customer = new CustomerDTO() { Id = "SERG", ContactName = "Sergiusz Pietrala" };
+            _controller = new CustomersController(mockObject.Object);
+            mockObject.Setup(x =>
+            x.GetCustomerByIdAsync(It.IsAny<string>()).Result)
+                .Returns(new Customer() { CustomerId = "SERG" });
+
+            await _controller.PutCustomer("SERG", customer);
+
+            mockObject.Verify(x => x.SaveCustomerChangesAsync(), Times.Once());
         }
     }
 }
